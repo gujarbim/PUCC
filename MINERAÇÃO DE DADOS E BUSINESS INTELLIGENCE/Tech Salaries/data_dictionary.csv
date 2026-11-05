@@ -1,0 +1,17 @@
+column,dtype,description
+employee_id,string,Unique employee identifier.
+level,string,"Career level: L3_entry, L4, L5_senior, L6_staff, L7_principal."
+years_experience,float,Total years of professional experience.
+company_tier,string,"ai_lab, quant_hft, faang, high_growth_public, bank, mid_tier, startup_late, startup_early."
+location,string,"sf_bay, nyc, seattle, other_us_metro, us_lcol, remote_us, europe, india."
+specialization,string,"ml_ai, backend, infra, data, frontend, security, mobile."
+education,string,"bachelors, masters, phd, bootcamp, self_taught."
+company_size,string,"Headcount band: <50, 50-500, 500-5k, 5k-50k, >50k."
+remote,int,1 if primarily remote.
+num_competing_offers,int,Number of competing offers held during negotiation (0-3).
+negotiated,int,1 if the employee negotiated their offer.
+base_salary_usd,int,"Annual base salary, USD."
+bonus_usd,int,"Annual cash bonus, USD."
+equity_annual_usd,int,"Annualized equity/RSU value, USD."
+total_comp_usd,int,"TARGET. Total annual compensation (base + bonus + equity), USD."
+high_earner,int,TARGET (binary). 1 if total_comp_usd is in the top decile.
