@@ -1,0 +1,6 @@
+<!DOCTYPE html><html><body style="margin:0;overflow:hidden"><div id="c" style="overflow:hidden;position:relative"><img id="i" src="figma.svg" style="position:absolute;width:1725px"></div>
+<script>
+const [x,y,w,h]=location.hash.slice(1).split(',').map(Number);
+const c=document.getElementById('c'),i=document.getElementById('i');
+c.style.width=w+'px';c.style.height=h+'px';i.style.left=-(434+x)+'px';i.style.top=-(7+y)+'px';
+</script></body></html>
