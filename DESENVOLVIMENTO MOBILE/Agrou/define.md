@@ -1,4 +1,4 @@
-# Persona
+﻿# Persona
 
 ### *Contexto:* Um produtor rural e pecuarista no Brasil. Ele administra uma fazenda mista e frequentemente precisa renovar seu maquinário agrícola, comprar insumos ou vender lotes de gado e matrizes.
 ### *Objetivo:* Encontrar bons negócios (tanto para compra quanto para venda) de forma rápida, alcançando parceiros de outras regiões para conseguir preços mais justos, sem depender exclusivamente dos atravessadores e intermediários locais.
@@ -11,24 +11,26 @@ Precisa de uma plataforma digital segura e especializada no agronegócio para co
 # Escopo do MVP
 
 ## Must:
-  - Cadastro e autenticação de usuários (com número de WhatsApp).
-  - Criação e publicação de anúncios com fotos, título, preço e descrição.
-  - Navegação e busca de anúncios divididos por categorias-chave (Animais, Máquinas, Insumos, Veículos).
-  - Visualização dos detalhes do anúncio com um botão direto para iniciar conversa com o vendedor no WhatsApp.
+  - **M1 – Navegação e busca por categorias:** tela inicial com busca e setores (Animais, Máquinas, Insumos, Veículos) e lista de oportunidades que leva ao detalhe do anúncio.
+  - **M2 – Detalhes do anúncio com contato via WhatsApp:** fotos, preço, ficha técnica (ex.: horas de motor, ano, potência), dados do vendedor e botão direto "Negociar no WhatsApp".
+  - **M3 – Criação e publicação de anúncio:** fotos, classificação (categoria, marca, modelo), ficha técnica obrigatória, preço e condições, e o botão "Publicar Anúncio".
+  - **M4 – Painel do anunciante:** lista dos próprios anúncios com as ações editar, pausar e excluir.
 
 ## Should:
-  - Filtros técnicos específicos por categoria (ex: raça e peso para gado; marca e ano para tratores).
-  - Painel do usuário (Dashboard) para edição, pausa e exclusão de seus próprios anúncios.
+  - Cadastro e autenticação de usuários (com número de WhatsApp). No MVP o usuário já entra logado.
+  - Filtros técnicos avançados por categoria (raça e peso para gado; marca e ano para tratores).
   - Selo de "Anunciante Verificado" para aumentar a segurança.
 
 ## Could:
-  - Sistema de assinaturas e planos pagos (Premium) para destacar anúncios na página inicial.
-  - Chat interno próprio do aplicativo para não depender 100% do WhatsApp.
-  - Sistema de avaliação e reputação de vendedores (estrelas).
+  - Planos pagos (Premium) para destacar anúncios na página inicial.
+  - Chat interno no aplicativo, para não depender 100% do WhatsApp.
+  - Avaliação e reputação de vendedores (estrelas).
+  - Simulação de parcelas e de frete no detalhe do anúncio.
 
 # User stories
 
-- Cadastrar e fazer login no aplicativo para que eu possa acessar a plataforma e publicar meus produtos.
-- Publicar um anúncio com fotos e detalhes para que outros compradores do setor possam encontrar o que estou vendendo.
-- Navegar e buscar itens por categorias para que eu encontre o maquinário ou lote de animais específico que preciso para minha fazenda de forma rápida.
-- Visualizar os detalhes de um anúncio e clicar no botão de WhatsApp para que eu possa negociar e tirar dúvidas diretamente com o vendedor.
+- **M1:** Como produtor, quero navegar e buscar itens por categoria para encontrar rapidamente o maquinário ou o lote de animais de que preciso.
+- **M2:** Como comprador, quero ver os detalhes técnicos de um anúncio e tocar no botão de WhatsApp para negociar direto com o vendedor.
+- **M3:** Como vendedor, quero publicar um anúncio com fotos e ficha técnica para que outros produtores encontrem o que estou vendendo.
+- **M4:** Como vendedor, quero gerenciar meus anúncios (editar, pausar e excluir) para manter minhas ofertas atualizadas.
+

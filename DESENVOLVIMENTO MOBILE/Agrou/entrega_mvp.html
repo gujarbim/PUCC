@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Agrou – Protótipo do MVP</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1f2a1f; font-size: 11.5pt; margin: 0; }
+  h1 { color: #1b5e20; font-size: 24pt; margin: 0 0 4px; }
+  h2 { color: #1b5e20; border-bottom: 2px solid #1b5e20; padding-bottom: 4px; margin: 18px 0 10px; }
+  h3 { margin: 0 0 6px; color: #2e7d32; }
+  .sub { color: #555; margin-bottom: 14px; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid #c8d6c8; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #e8f5e9; }
+  .page { page-break-before: always; }
+  .link { font-size: 10.5pt; word-break: break-all; background: #f1f8f1; padding: 8px; border-radius: 6px; }
+  .tela { display: flex; gap: 16px; }
+  .shots { display: flex; gap: 6px; }
+  .seg { width: 218px; height: 700px; overflow: hidden; border: 1px solid #bbb; border-radius: 6px; position: relative; }
+  .seg img { position: absolute; width: 966px; }
+  .info { flex: 1; font-size: 10.5pt; }
+  .info p { margin: 4px 0 8px; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; color: #fff; font-size: 9pt; font-weight: bold; }
+  .alta { background: #c62828; } .media { background: #ef6c00; } .baixa { background: #558b2f; }
+  .label { font-weight: bold; color: #2e7d32; text-align: center; font-size: 9pt; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+
+<h1>Agrou – Protótipo do MVP</h1>
+<div class="sub">Desenvolvimento Mobile – PUC · Grupo: Gustavo Alencar, Mateus Eler Galvão de França, Arthur Grandesi Dovigo, Gabriel Souza de Oliveira</div>
+
+<h2>1. Lista final de Musts</h2>
+<table>
+  <tr><th>#</th><th>Must</th><th>Tela</th><th>Fluxo navegável (só toques)</th></tr>
+  <tr><td>M1</td><td>Navegação e busca de anúncios por categorias (Animais, Máquinas, Insumos, Veículos)</td><td>Agrou – Início</td><td>Início → toque em um setor ou card de "Oportunidades do Dia" → Detalhes do Lote</td></tr>
+  <tr><td>M2</td><td>Detalhes do anúncio com ficha técnica e botão direto para o WhatsApp do vendedor</td><td>Detalhes do Lote</td><td>Detalhes do Lote → "Negociar no WhatsApp"</td></tr>
+  <tr><td>M3</td><td>Criação e publicação de anúncio com fotos, classificação, ficha técnica e preço</td><td>Anunciar</td><td>Botão "+" (barra inferior) → Anunciar → "Publicar Anúncio Agora" → Painel</td></tr>
+  <tr><td>M4</td><td>Painel do anunciante para gerenciar os próprios anúncios (editar, pausar, excluir)</td><td>Painel – Meus Anúncios</td><td>Aba "Painel" (barra inferior) → Painel → Editar / Pausar / Excluir</td></tr>
+</table>
+<p>Login/cadastro ficou como <i>Should</i> e não entra no MVP: o usuário já está logado e nenhum Must depende dessa tela.</p>
+
+<h2>2. Link do protótipo do MVP no Figma</h2>
+<div class="link">https://www.figma.com/proto/NBb3bcvSFvKpSVf5oofUs4/Sem-t%C3%ADtulo?node-id=1-1358&amp;starting-point-node-id=1%3A1358</div>
+<p>Visibilidade: qualquer pessoa com o link pode visualizar.</p>
+
+<h2>3. Relatório de mudanças</h2>
+<p>O grupo não guardou uma cópia do protótipo hi-fi anterior antes das alterações. Por isso, cada tela aparece com o print do <b>depois</b>. As decisões foram tomadas com base nas heurísticas de Nielsen e na severidade de cada problema.</p>
+
+<!-- TELA 1 -->
+<div class="page">
+<h2>3.1 Agrou – Início (M1)</h2>
+<div class="tela">
+  <div class="shots">
+    <div><div class="label">Depois (1/3)</div><div class="seg"><img src="figma.svg" style="left:-6.7px;top:-3.9px"></div></div>
+    <div><div class="label">Depois (2/3)</div><div class="seg"><img src="figma.svg" style="left:-6.7px;top:-703.9px"></div></div>
+    <div><div class="label">Depois (3/3)</div><div class="seg"><img src="figma.svg" style="left:-6.7px;top:-1403.9px"></div></div>
+  </div>
+  <div class="info">
+    <h3>O que mudou</h3>
+    <p>Barra de busca e setores principais (Animais, Máquinas, Insumos, Veículos) colocados no topo. Os cards de oportunidades passaram a mostrar preço, local e um botão "Negociar".</p>
+    <h3>Decisões aplicadas</h3>
+    <p><span class="tag alta">ALTA</span> Busca e categorias visíveis logo na entrada (H6 – reconhecer em vez de lembrar).</p>
+    <p><span class="tag media">MÉDIA</span> Cards com preço e localização padronizados (H4 – consistência e padrões).</p>
+    <p><span class="tag baixa">BAIXA</span> Selo de produtos verificados na faixa de destaque (H1 – visibilidade do status).</p>
+  </div>
+</div>
+</div>
+
+<!-- TELA 2 -->
+<div class="page">
+<h2>3.2 Detalhes do Lote (M2)</h2>
+<div class="tela">
+  <div class="shots">
+    <div><div class="label">Depois (1/2)</div><div class="seg"><img src="figma.svg" style="left:-243px;top:-3.9px"></div></div>
+    <div><div class="label">Depois (2/2)</div><div class="seg"><img src="figma.svg" style="left:-243px;top:-703.9px"></div></div>
+  </div>
+  <div class="info">
+    <h3>O que mudou</h3>
+    <p>Ficha técnica organizada em blocos (horas de motor, ano, potência). O botão "Negociar no WhatsApp" ficou fixo no rodapé da tela.</p>
+    <h3>Decisões aplicadas</h3>
+    <p><span class="tag alta">ALTA</span> Botão de contato sempre visível e com destaque (H7 – eficiência de uso).</p>
+    <p><span class="tag media">MÉDIA</span> Ficha técnica agrupada, com rótulos claros (H8 – design minimalista).</p>
+    <p><span class="tag baixa">BAIXA</span> Botão "voltar" e botão de compartilhar no topo (H3 – controle e liberdade).</p>
+  </div>
+</div>
+</div>
+
+<!-- TELA 3 -->
+<div class="page">
+<h2>3.3 Anunciar (M3)</h2>
+<div class="tela">
+  <div class="shots">
+    <div><div class="label">Depois (1/2)</div><div class="seg"><img src="figma.svg" style="left:-486px;top:-3.9px"></div></div>
+    <div><div class="label">Depois (2/2)</div><div class="seg"><img src="figma.svg" style="left:-486px;top:-703.9px"></div></div>
+  </div>
+  <div class="info">
+    <h3>O que mudou</h3>
+    <p>O formulário foi dividido em seções numeradas: fotos, classificação, ficha técnica e condições comerciais. Os campos obrigatórios estão marcados e há um indicador de etapa no topo.</p>
+    <h3>Decisões aplicadas</h3>
+    <p><span class="tag alta">ALTA</span> Campos obrigatórios marcados para evitar publicar incompleto (H5 – prevenção de erros).</p>
+    <p><span class="tag media">MÉDIA</span> Indicador de progresso "Passo X de Y" (H1 – visibilidade do status).</p>
+    <p><span class="tag baixa">BAIXA</span> Termos do agro nos rótulos, como "lote" e "horas de motor" (H2 – correspondência com o mundo real).</p>
+  </div>
+</div>
+</div>
+
+<!-- TELA 4 -->
+<div class="page">
+<h2>3.4 Painel – Meus Anúncios (M4)</h2>
+<div class="tela">
+  <div class="shots">
+    <div><div class="label">Depois (1/2)</div><div class="seg"><img src="figma.svg" style="left:-740.9px;top:-3.9px"></div></div>
+    <div><div class="label">Depois (2/2)</div><div class="seg"><img src="figma.svg" style="left:-740.9px;top:-703.9px"></div></div>
+  </div>
+  <div class="info">
+    <h3>O que mudou</h3>
+    <p>Resumo do perfil com métricas (anúncios ativos, visualizações, contatos). Cada anúncio tem as ações Editar, Pausar e Excluir no próprio card.</p>
+    <h3>Decisões aplicadas</h3>
+    <p><span class="tag alta">ALTA</span> Ações de gestão direto no card, sem telas extras (H7 – eficiência de uso).</p>
+    <p><span class="tag media">MÉDIA</span> Status do anúncio (ativo/pausado) visível em cada card (H1 – visibilidade do status).</p>
+    <p><span class="tag baixa">BAIXA</span> "Excluir" em cor diferente das outras ações (H5 – prevenção de erros).</p>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
+
+
