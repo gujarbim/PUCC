@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Agrou – Duas Telas e Navegação Guiadas por Especificação</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm 11mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #151b2b;
+    font-size: 9.5pt;
+    line-height: 1.38;
+    margin: 0;
+  }
+  h1 { color: #0f5c2a; font-size: 20pt; margin: 0 0 4px; }
+  h2 {
+    color: #0f5c2a;
+    font-size: 13pt;
+    border-bottom: 2px solid #1b7a3a;
+    padding-bottom: 3px;
+    margin: 14px 0 8px;
+  }
+  h3 { color: #1b7a3a; font-size: 10.5pt; margin: 10px 0 5px; }
+  p { margin: 4px 0 7px; }
+  .sub { color: #5b6070; font-size: 9.5pt; margin-bottom: 10px; }
+  .meta-box {
+    background: #f1f2fa;
+    border: 1px solid #d7dcf5;
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-bottom: 10px;
+  }
+  .meta-box a, .link { color: #006b2c; font-weight: 600; word-break: break-all; }
+  .limite {
+    background: #eef8f1;
+    border-left: 4px solid #006b2c;
+    padding: 6px 10px;
+    margin: 6px 0 10px;
+    font-size: 9.2pt;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 6px 0 10px;
+    font-size: 8.6pt;
+  }
+  th, td {
+    border: 1px solid #cfd6e6;
+    padding: 5px 6px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #e8f5e9; color: #0f5c2a; font-weight: 700; }
+  tr { break-inside: avoid; }
+  .page { page-break-before: always; }
+  .grid-prints {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .pair-card {
+    border: 1px solid #d4daea;
+    border-radius: 8px;
+    padding: 8px;
+    background: #faf8ff;
+    break-inside: avoid;
+  }
+  .pair-title {
+    font-weight: 700;
+    color: #0f5c2a;
+    font-size: 9.5pt;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .pair-imgs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .shot {
+    width: 210px;
+    text-align: center;
+  }
+  .shot-label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #283044;
+    margin-bottom: 4px;
+  }
+  .shot img {
+    width: 210px;
+    height: auto;
+    max-height: 485px;
+    object-fit: contain;
+    border: 1px solid #bcc5dc;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+  }
+  .shot-tall img {
+    width: auto;
+    max-width: 205px;
+    max-height: 455px;
+    border: 1px solid #bcc5dc;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+  }
+  .extra-grid {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-size: 7.8pt;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .pass { background: #dcfce7; color: #14532d; }
+  .fail { background: #fee2e2; color: #991b1b; }
+  .na { background: #f1f5f9; color: #475569; }
+  .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  code { background: #eef1f8; padding: 1px 4px; border-radius: 3px; font-size: 8.2pt; }
+</style>
+</head>
+<body>
+
+<h1>Agrou – Duas Telas e Navegação Guiadas por Especificação</h1>
+<div class="sub">
+  Disciplina: Desenvolvimento Mobile (218191) – PUC-Campinas ·
+  Grupo: Gustavo Alencar, Mateus Eler Galvão de França, Arthur Grandesi Dovigo, Gabriel Souza de Oliveira
+</div>
+
+<div class="meta-box">
+  <div><strong>Fluxo do Protótipo do MVP (Must M1 → M2):</strong> <code>Agrou – Início</code> (M1) ↔ <code>Detalhes Do Lote</code> (M2). Na atividade anterior foi implementada a tela <code>Detalhes Do Lote</code>; nesta atividade especificamos e construímos a tela <code>Agrou – Início</code>, conectamos a navegação de ida e volta e executamos todos os testes das duas telas.</div>
+  <div style="margin-top:5px;"><strong>Link do commit (repositório PUCC):</strong>
+    <a href="https://github.com/gujarbim/PUCC/commit/fa8a7cbecb884a7a02ce8d3dd17ea65ca675fae2">https://github.com/gujarbim/PUCC/commit/fa8a7cbecb884a7a02ce8d3dd17ea65ca675fae2</a>
+  </div>
+  <div style="margin-top:3px;"><strong>Protótipo Figma:</strong>
+    <a href="https://www.figma.com/proto/NBb3bcvSFvKpSVf5oofUs4/Sem-t%C3%ADtulo?node-id=1-1358&starting-point-node-id=1%3A1358">https://www.figma.com/proto/NBb3bcvSFvKpSVf5oofUs4/Sem-t%C3%ADtulo?node-id=1-1358</a>
+  </div>
+</div>
+
+<h2>1. Especificações Finais das Duas Telas e da Navegação</h2>
+
+<h3>1.1 Tela 1 — Agrou – Início (Must M1)</h3>
+<div class="limite">
+  <strong>Limite:</strong> Construir somente a tela <strong>Agrou – Início</strong> e os dados estáticos dos anúncios exibidos nela; <strong>não alterar nenhuma outra tela</strong> (nem implementar telas adicionais como Explorar, Anunciar, Anúncios ou Perfil).<br>
+  <strong>Origem dos dados:</strong> Os 4 setores e os 4 anúncios de "Oportunidades do Dia" vêm da base estática local em memória (<code>anunciosIniciais</code> e <code>setoresPrincipais</code> em <code>lib/models/anuncio.dart</code>), extraída do protótipo do Figma.
+</div>
+
+<table>
+  <tr><th style="width:4%">#</th><th style="width:24%">Elemento</th><th>Conteúdo exato (conforme Figma)</th></tr>
+  <tr><td>E1</td><td>Cabeçalho fixo (64 px, <code>#FAF8FF</code>)</td><td>Logo <code>Agrou</code> (<code>32×32</code>) · título <strong>"Agrou"</strong> (<code>#0F5C2A</code>) e subtítulo <strong>"Início"</strong> (<code>#5B6070</code>) · botão de sino com marcador <code>#BA1A1A</code> (<code>8×8</code>) e avatar do usuário (<code>32×32</code>) à direita.</td></tr>
+  <tr><td>E2</td><td>Faixa de cotação (36 px, <code>#283044</code>)</td><td>Ponto <code>#7FFC97</code> + <strong>"MERCADO AGORA"</strong> à esquerda · <strong>"Boi Gordo SP: R$ 315,50/@"</strong> + ícone de tendência + <strong>"+0.8%"</strong> (<code>#7FFC97</code>) à direita.</td></tr>
+  <tr><td>E3</td><td>Banner Hero e busca (<code>#006B2C</code> → <code>#1B7A3A</code>)</td><td>Pílula <strong>"Plataforma Oficial do Agronegócio"</strong> · título <strong>"Negocie direto no campo sem intermediários"</strong> · subtítulo · cartão branco com campo <code>TextField</code> (placeholder <em>"Buscar tratores, nelore, soja, colheitadeiras..."</em>), botão de filtros (<code>#EAEDFF</code>), seletor de região (inicial <strong>"Mato Grosso &amp; SP"</strong>) e botão <strong>"Buscar →"</strong>.</td></tr>
+  <tr><td>E4</td><td>Faixa de verificação (<code>#F1F2FA</code>)</td><td>Quadrado <code>#8AF7A0</code> com selo · título <strong>"100% Produtores Verificados"</strong> · subtítulo <strong>"Zero Golpes • Checagem de CAR, GTA e Nota Fiscal"</strong> · seta <code>&gt;</code>.</td></tr>
+  <tr><td>E5</td><td>Setores Principais</td><td>Título <strong>"Setores Principais"</strong> / <strong>"Explore por cadeia produtiva"</strong> + link <strong>"Ver todos&gt;"</strong> · grade 2×2 de cartões <code>128 px</code>: (1) <em>Tratores &amp; Máquinas</em>, (2) <em>Gado &amp; Animais</em>, (3) <em>Insumos &amp; Sementes</em>, (4) <em>Veículos &amp; Carga</em>.</td></tr>
+  <tr><td>E6</td><td>Modalidades de Negócio</td><td>Título <strong>"Modalidades de Negócio"</strong> · 3 botões horizontais: <strong>"Compra Direta"</strong> (selecionado inicialmente em <code>#006B2C</code>), <strong>"Leilões Ativos"</strong> e <strong>"Barter &amp; Permuta"</strong>.</td></tr>
+  <tr><td>E7</td><td>Oportunidades do Dia</td><td>Cabeçalho <strong>"Oportunidades do Dia"</strong> / <strong>"Lotes auditados com documentação regular"</strong> · 4 cards com foto <code>192 px</code>, badges, categoria, cidade/UF, título, bloco técnico de 2 colunas, valor em <code>#1B7A3A</code> e botão <strong>"Negociar"</strong>: (1) <em>Lote 45 Novilhas Nelore PO Registradas</em> (Uberaba, MG · R$ 148.000), (2) <em>Trator John Deere 8335R (335 cv) Cabinado</em> (Mirassol, SP · R$ 430.000), (3) <em>Colheitadeira New Holland CR 9060</em> (Rio Verde, GO · R$ 890.000), (4) <em>Pulverizador Jacto Uniport 3030 Plus</em> (Sorriso, MT · R$ 620.000).</td></tr>
+  <tr><td>E8</td><td>Banner CTA (<code>#283044</code>)</td><td>Etiqueta <strong>"VENDA DIRETA SEM COMISSÃO"</strong> · título <strong>"Tem maquinário ou gado para negociar?"</strong> · botão <strong>"Publicar Anúncio Grátis"</strong> · rodapé <strong>"Sem mensalidade"</strong> e <strong>"Contato Direto"</strong>.</td></tr>
+  <tr><td>E9</td><td>Rodapé institucional (<code>#E2E7FF</code>)</td><td>Logo <strong>"Agrou"</strong> · texto descritivo · links (Termos e Condições, Privacidade &amp; LGPD, Suporte ao Produtor, Segurança &amp; GTA) · <em>"© 2026 Agrou Tecnologia Agrícola Ltda. Todos os direitos reservados."</em></td></tr>
+  <tr><td>E10</td><td>Barra inferior fixa (<code>68 px</code>, <code>#FAF8FF</code>)</td><td>5 itens: <strong>"Início"</strong> (selecionado), <strong>"Explorar"</strong>, botão <code>+</code> <strong>"Anunciar"</strong> (<code>#006B2C</code>), <strong>"Anúncios"</strong> (badge <strong>"3"</strong>) e <strong>"Perfil"</strong>.</td></tr>
+</table>
+
+<div class="two-cols">
+  <div>
+    <h3>Critérios de aceitação — Início</h3>
+    <table>
+      <tr><th>ID</th><th>Ao tocar em…</th><th>Acontece…</th></tr>
+      <tr><td>I1</td><td>Notificações / Avatar (E1)</td><td>Exibe <em>"Nenhuma notificação nova"</em> (sino) ou <em>"Usuário logado: Antônio Carlos Novaes"</em> (avatar).</td></tr>
+      <tr><td>I2</td><td>Busca + <strong>Buscar →</strong> (E3)</td><td>Com texto válido após <code>.trim()</code>, filtra os cards; com campo vazio ou só espaços, mantém os 4 anúncios.</td></tr>
+      <tr><td>I3</td><td>Seletor de região (E3)</td><td>Abre opções e filtra pela região selecionada; <em>"Todas as regiões"</em> limpa o filtro regional.</td></tr>
+      <tr><td>I4</td><td>Filtros (E3) / Verificados (E4)</td><td>Exibe avisos <em>"Filtros técnicos aplicados"</em> e <em>"Produtores validados por CAR, GTA e Sefaz"</em>.</td></tr>
+      <tr><td>I5</td><td>Setor (E5) / <strong>Ver todos&gt;</strong></td><td>Filtra pelo setor tocado com borda <code>#006B2C</code>; novo toque ou <em>"Ver todos&gt;"</em> exibe todos os 4 cards.</td></tr>
+      <tr><td>I6</td><td>Modalidades (E6)</td><td>Alterna botão para <code>#006B2C</code>: <em>Compra Direta</em> (4), <em>Barter &amp; Permuta</em> (2) e <em>Leilões Ativos</em> (estado vazio + botão).</td></tr>
+      <tr><td>I7</td><td>CTA / Rodapé / Abas (E8-E10)</td><td>Exibe aviso informando que a tela correspondente está fora do escopo atual, sem sair da Início.</td></tr>
+      <tr><td>I8</td><td>Rolagem da tela</td><td>Cabeçalho (E1) e barra inferior (E10) ficam fixos; apenas a área central rola.</td></tr>
+    </table>
+  </div>
+  <div>
+    <h3>Critérios de navegação (ida) — Início → Detalhes Do Lote</h3>
+    <table>
+      <tr><th>ID</th><th>Destino</th><th>Ao tocar em X, abre a tela Y com Z</th></tr>
+      <tr><td>N1</td><td>Detalhes Do Lote (Nelore)</td><td>Ao tocar no card 1 ou em <strong>"Negociar"</strong>, abre <strong>Detalhes Do Lote</strong> com título <em>"Lote 45 Novilhas Nelore PO Registradas"</em>, <em>"Uberaba, MG"</em>, <strong>R$ 148.000</strong>, galeria <code>1/3</code> e ficha técnica pecuária.</td></tr>
+      <tr><td>N2</td><td>Detalhes Do Lote (Trator JD)</td><td>Ao tocar no card 2 ou em <strong>"Negociar"</strong>, abre <strong>Detalhes Do Lote</strong> com título <em>"Trator John Deere 8335R"</em>, <em>"Mirassol, SP • Disponível para vistoria física na fazenda"</em>, <strong>R$ 430.000</strong>, galeria <code>1/6</code> e 7 itens técnicos.</td></tr>
+      <tr><td>N3</td><td>Detalhes Do Lote (Colheitadeira)</td><td>Ao tocar no card 3 ou em <strong>"Negociar"</strong>, abre <strong>Detalhes Do Lote</strong> com título <em>"Colheitadeira New Holland CR 9060"</em>, <em>"Rio Verde, GO"</em>, <strong>R$ 890.000</strong> e ficha de colheitadeira.</td></tr>
+      <tr><td>N4</td><td>Detalhes Do Lote (Pulverizador)</td><td>Ao tocar no card 4 ou em <strong>"Negociar"</strong>, abre <strong>Detalhes Do Lote</strong> com título <em>"Pulverizador Jacto Uniport 3030 Plus"</em>, <em>"Sorriso, MT"</em>, <strong>R$ 620.000</strong> e ficha do pulverizador.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- PAGE 2: SPEC TELA 2 -->
+<div class="page">
+<h2>1.2 Tela 2 — Detalhes Do Lote (Must M2 · Versão Final)</h2>
+<div class="limite">
+  <strong>Limite:</strong> Tela construída na atividade anterior; <strong>não alterar nenhuma outra tela</strong> além do recebimento do objeto <code>Anuncio</code> na entrada e do retorno à tela <strong>Agrou – Início</strong>.<br>
+  <strong>Origem dos dados:</strong> Os dados exibidos (etiquetas, título, localização, galeria de fotos, preço, permuta, dados do vendedor, ficha técnica de 7 itens, histórico, frete e código) vêm do objeto <code>Anuncio</code> enviado pela tela <strong>Agrou – Início</strong> no <code>Navigator.push</code> (com fallback para <em>Trator John Deere 8335R</em> quando aberta isoladamente).
+</div>
+
+<div class="two-cols">
+  <div>
+    <h3>Estrutura (E1 a E12)</h3>
+    <table>
+      <tr><th>#</th><th>Elemento</th><th>Conteúdo exato (no anúncio padrão Trator JD)</th></tr>
+      <tr><td>E1</td><td>Cabeçalho fixo</td><td>Seta voltar (<code>btnVoltar</code>) · logo <code>"Agrou"</code> · título <strong>"Detalhes Do Lote"</strong> · avatar (<code>assets/avatar_user.png</code>).</td></tr>
+      <tr><td>E2</td><td>Galeria</td><td>Foto <code>292 px</code>, contador <strong>"1/6"</strong> no topo esquerdo, botões <strong>favoritar</strong> e <strong>compartilhar</strong> no topo direito, setas <strong>‹ ›</strong>.</td></tr>
+      <tr><td>E3</td><td>Miniaturas</td><td>Até 5 miniaturas (<code>64×48</code>); selecionada com borda <code>#1B7A3A</code> de <code>2 px</code>.</td></tr>
+      <tr><td>E4</td><td>Etiquetas</td><td><em>Tratores &amp; Máquinas</em> (<code>#DCE4FF</code>), <em>Usado Revisado</em> (<code>#8AF7A0</code>), <em>Produtor Verificado (CPF/CNPJ)</em> (<code>#FFDDB3</code>).</td></tr>
+      <tr><td>E5</td><td>Título e local</td><td><strong>"Trator John Deere 8335R"</strong> · <em>"Mirassol, SP • Disponível para vistoria física na fazenda"</em>.</td></tr>
+      <tr><td>E6</td><td>Card de preço</td><td><strong>"VALOR À VISTA NEGOCIÁVEL"</strong> · <strong>"R$ 430.000"</strong> · etiqueta <em>Permuta (Gado ou Soja Futura)</em> · faixa <em>Garantia Agrou Safe</em>.</td></tr>
+      <tr><td>E7</td><td>Card do vendedor</td><td>Foto, <strong>"Antônio Novaes"</strong> + selo, <em>Fazenda Santa Fé • Mirassol/SP</em>, nota <strong>★ 4.9 (28 vendas concluídas)</strong>, <em>RESPOSTA &lt; 15 minutos</em> e <em>NF ORIGEM Validada no Sefaz</em>.</td></tr>
+      <tr><td>E8</td><td>Ficha Técnica Oficial</td><td>Etiqueta <em>REVISÃO AUTORIZADA</em> + grade 2 colunas (Horímetro, Ano/Modelo, Potência, Câmbio, Piloto, Rodados e Hidráulico).</td></tr>
+      <tr><td>E9</td><td>Histórico de Manutenção</td><td>Destaque <strong>"Motor e Transmissão Novos (08/2024)"</strong> + 3 observações do proprietário.</td></tr>
+      <tr><td>E10</td><td>Prancha &amp; Frete</td><td><strong>"Cotação p/ Prancha Pesada"</strong> + botão <strong>"Calcular CEP"</strong>.</td></tr>
+      <tr><td>E11</td><td>Segurança Agrou</td><td>Aviso em fundo <code>#F1F2FA</code> com ícone de escudo <code>#9A6A00</code>.</td></tr>
+      <tr><td>E12</td><td>Rodapé fixo</td><td>Botão <code>#25D366</code> <strong>"Negociar no WhatsApp"</strong> + telefone · link <em>Emitir Proposta Formal com Garantia de Compra</em> · <em>Anúncio #AGR-8335</em>.</td></tr>
+    </table>
+  </div>
+  <div>
+    <h3>Critérios de aceitação e navegação de volta</h3>
+    <table>
+      <tr><th>ID</th><th>Ao tocar em…</th><th>Acontece…</th></tr>
+      <tr><td><strong>C1 (Volta)</strong></td><td>Seta voltar (E1)</td><td><strong>Fecha Detalhes Do Lote e volta à tela Agrou – Início mantendo a busca, região, setor, modalidade, posição de rolagem e estado de favorito do anúncio.</strong> Sem tela anterior, exibe <em>"Voltando para o Início"</em>.</td></tr>
+      <tr><td>C2</td><td>Favoritar (E2)</td><td>Alterna coração em <code>#F44336</code> e exibe <em>"Adicionado aos favoritos"</em> / <em>"Removido dos favoritos"</em>, refletindo o ícone na tela Início ao retornar.</td></tr>
+      <tr><td>C3</td><td>Compartilhar (E2)</td><td>Exibe <em>"Link do anúncio copiado"</em>.</td></tr>
+      <tr><td>C4 / C5</td><td>Setas › / ‹ (E2)</td><td>Avança ou retrocede foto e atualiza contador (<code>1/6</code> ↔ <code>6/6</code> circular).</td></tr>
+      <tr><td>C6</td><td>Miniatura (E3)</td><td>Atualiza foto principal, contador e borda verde na miniatura tocada.</td></tr>
+      <tr><td>C7</td><td>Calcular CEP (E10)</td><td>Abre diálogo de CEP; com 8 dígitos válidos exibe <em>"Frete estimado: R$ 4.800"</em>; vazio/inválido exibe <em>"Informe um CEP válido com 8 dígitos"</em>.</td></tr>
+      <tr><td>C8</td><td>WhatsApp (E12)</td><td>Abre <code>https://wa.me/5517999821234</code> com mensagem do anúncio selecionado.</td></tr>
+      <tr><td>C9 / C10</td><td>Telefone / Proposta (E12)</td><td>Exibe <em>"Ligando para Antônio Novaes…"</em> e <em>"Proposta formal em breve"</em>.</td></tr>
+      <tr><td>C11</td><td>Rolagem da tela</td><td>Cabeçalho (E1) e rodapé (E12) permanecem fixos; somente o conteúdo rola.</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: PRINTS TELA 1 -->
+<div class="page">
+<h2>2. Prints Lado a Lado (Largura Mobile 390 px) — Tela 1: Agrou – Início</h2>
+<div class="grid-prints">
+  <div class="pair-card">
+    <div class="pair-title">Parte 1 — Cabeçalho, Cotação, Hero Busca, Verificados e Setores</div>
+    <div class="pair-imgs">
+      <div class="shot"><div class="shot-label">Figma (390 px)</div><img src="prints/figma_inicio_1.png"></div>
+      <div class="shot"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_inicio_1.png"></div>
+    </div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Parte 2 — Modalidades e Oportunidades do Dia (Nelore &amp; John Deere)</div>
+    <div class="pair-imgs">
+      <div class="shot"><div class="shot-label">Figma (390 px)</div><img src="prints/figma_inicio_2.png"></div>
+      <div class="shot"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_inicio_2.png"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 4: PRINTS TELA 1 PARTE 3 & 4 -->
+<div class="page">
+<h2>2. Prints Lado a Lado (Largura Mobile 390 px) — Tela 1: Agrou – Início (continuação)</h2>
+<div class="grid-prints">
+  <div class="pair-card">
+    <div class="pair-title">Parte 3 — Cards Colheitadeira CR 9060 e Pulverizador Uniport 3030</div>
+    <div class="pair-imgs">
+      <div class="shot"><div class="shot-label">Figma (390 px)</div><img src="prints/figma_inicio_3.png"></div>
+      <div class="shot"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_inicio_3.png"></div>
+    </div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Parte 4 — Banner CTA Anunciante e Rodapé Institucional</div>
+    <div class="pair-imgs">
+      <div class="shot"><div class="shot-label">Figma (390 px)</div><img src="prints/figma_inicio_4.png"></div>
+      <div class="shot"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_inicio_4.png"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 5: PRINTS TELA 2 -->
+<div class="page">
+<h2>2. Prints Lado a Lado (390 px) — Tela 2: Detalhes Do Lote</h2>
+<div class="grid-prints">
+  <div class="pair-card">
+    <div class="pair-title">Detalhes Do Lote — Topo, Galeria 1/6, Preço e Vendedor</div>
+    <div class="pair-imgs">
+      <div class="shot shot-tall"><div class="shot-label">Figma (390 px)</div><img src="figma_detalhes_1.png"></div>
+      <div class="shot shot-tall"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_detalhes_1.png"></div>
+    </div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Detalhes Do Lote — Histórico, Frete, Segurança e Rodapé</div>
+    <div class="pair-imgs">
+      <div class="shot shot-tall"><div class="shot-label">Figma (390 px)</div><img src="figma_detalhes_2.png"></div>
+      <div class="shot shot-tall"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_detalhes_3.png"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="page">
+<h2>2. Evidências Complementares: Ficha Técnica, Volta com Estado e Janela Estreita (320 px)</h2>
+<div class="extra-grid">
+  <div class="pair-card">
+    <div class="pair-title">Detalhes Do Lote — Ficha Técnica (7 itens)</div>
+    <div class="shot"><div class="shot-label">App no Chrome (390 px)</div><img src="prints/app_detalhes_2.png"></div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Retorno à Início (scroll e favorito preservados)</div>
+    <div class="shot"><div class="shot-label">App após voltar (390 px)</div><img src="prints/app_volta_inicio.png"></div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Teste de Quebra — Janela Estreita 320 px</div>
+    <div class="shot"><div class="shot-label">App no Chrome (320 px)</div><img src="prints/app_320_inicio.png"></div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 6: RELATORIO DE TESTES PARTE 1 -->
+<div class="page">
+<h2>3. Relatório de Casos de Teste — Tela Início (Elementos e Critérios)</h2>
+<table>
+  <tr>
+    <th style="width:5%">ID</th>
+    <th style="width:9%">Tela</th>
+    <th style="width:18%">Passos</th>
+    <th style="width:18%">Esperado</th>
+    <th style="width:18%">Obtido (1ª execução)</th>
+    <th style="width:7%">Status</th>
+    <th style="width:17%">Correção</th>
+    <th style="width:8%">Status depois</th>
+  </tr>
+  <tr>
+    <td>T01</td><td>Início</td>
+    <td>Abrir o app na largura 390×844 e observar E1 (cabeçalho).</td>
+    <td>Logo <code>Agrou</code>, título <code>Agrou / Início</code>, sino com ponto vermelho e avatar visíveis sem corte.</td>
+    <td>Logo, título, sino com ponto <code>#BA1A1A</code> e avatar renderizados no topo fixo.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T02</td><td>Início</td>
+    <td>Renderizar faixa E2 (<code>MERCADO AGORA</code>) em 390 px e fonte de teste.</td>
+    <td>Texto <code>MERCADO AGORA</code> e cotação <code>Boi Gordo SP: R$ 315,50/@ +0.8%</code> cabendo sem overflow.</td>
+    <td><code>A RenderFlex overflowed by 160 pixels on the right</code> em <code>inicio_page.dart:257</code>.</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Adicionado <code>Flexible</code> à esquerda e <code>Expanded(FittedBox(scaleDown))</code> à direita em <code>_faixaMercado()</code>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>T03</td><td>Início</td>
+    <td>Verificar pílula, título e linha Região + Botão Buscar no Banner Hero (E3).</td>
+    <td>Pílula <em>Plataforma Oficial do Agronegócio</em>, título, <code>Mato Grosso &amp; SP</code> e <code>Buscar →</code> sem overflow.</td>
+    <td>Overflow de <code>110 px</code> na pílula (<code>inicio_page.dart:305</code>) e <code>64 px</code> na linha de região (<code>inicio_page.dart:379</code>).</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Envolvidos textos da pílula e seletor de região com <code>Expanded</code>/<code>Flexible</code> e <code>TextOverflow.ellipsis</code>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>T04</td><td>Início</td>
+    <td>Verificar faixa E4 (<em>100% Produtores Verificados</em>) e grade 2×2 de Setores (E5).</td>
+    <td>Faixa de verificação e os 4 setores (<em>Tratores &amp; Máquinas</em>, <em>Gado &amp; Animais</em>, <em>Insumos</em>, <em>Veículos</em>) exibidos.</td>
+    <td>Todos os textos, ícones e 4 imagens carregados sem erro.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T05</td><td>Início</td>
+    <td>Renderizar seção E6 (<em>Modalidades de Negócio</em>) com 3 botões lado a lado.</td>
+    <td>Botões <em>Compra Direta</em>, <em>Leilões Ativos</em> e <em>Barter &amp; Permuta</em> alinhados sem overflow vertical.</td>
+    <td><code>A RenderFlex overflowed by 5.0/36 pixels on the bottom</code> no card <em>Barter &amp; Permuta</em> (altura fixa 74 px).</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Trocado <code>height: 74</code> por <code>constraints: BoxConstraints(minHeight: 74)</code> e <code>IntrinsicHeight</code> na linha.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>T06</td><td>Início</td>
+    <td>Rolar E7 e conferir todos os 4 cards de <em>Oportunidades do Dia</em>.</td>
+    <td>Nelore (R$ 148.000), John Deere (R$ 430.000), CR 9060 (R$ 890.000) e Jacto 3030 (R$ 620.000).</td>
+    <td>Todos os 4 cards com fotos, badges, specs de 2 colunas, preços e botões <em>Negociar</em> exibidos.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T07</td><td>Início</td>
+    <td>Rolar até Banner CTA (E8) e verificar linha <em>Sem mensalidade / Contato Direto</em>.</td>
+    <td>Banner escuro e itens de garantia exibidos dentro da largura disponível.</td>
+    <td><code>A RenderFlex overflowed by 77 pixels on the right</code> na linha de checks (<code>inicio_page.dart:980</code>).</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Substituída <code>Row</code> por <code>Wrap(alignment: WrapAlignment.center, spacing: 18)</code>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>T08</td><td>Início</td>
+    <td>Rolar até Rodapé (E9) e verificar Barra Inferior fixa (E10).</td>
+    <td>Rodapé <code>© 2026 Agrou</code> visível; barra inferior fixa com 5 botões sem overflow.</td>
+    <td><code>A RenderFlex overflowed by 5.0 pixels on the bottom</code> no item central <em>Anunciar</em> (<code>inicio_page.dart:1082</code>).</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Ajustada barra inferior para <code>minHeight: 68</code> + <code>SafeArea</code> e ícone <code>36×34</code>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>T09</td><td>Início</td>
+    <td>(I1/I4/I7) Tocar no sino, avatar, faixa verificada, CTA e barra inferior (<em>Explorar</em>).</td>
+    <td>Avisos corretos exibidos sem sair da tela <em>Início</em>.</td>
+    <td>Exibiu <em>"Nenhuma notificação nova"</em>, <em>"Usuário logado: Antônio Carlos Novaes"</em> e <em>"Tela Explorar fora do escopo atual"</em>.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T10</td><td>Início</td>
+    <td>(I2) Digitar <code>"John Deere"</code> em busca e tocar em <code>Buscar →</code>.</td>
+    <td>Lista filtra para exibir somente <em>Trator John Deere 8335R</em>.</td>
+    <td>Exibiu 1 card (<em>Trator John Deere 8335R</em>); demais ocultados.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T11</td><td>Início</td>
+    <td>(I3) Tocar no seletor de região e escolher <code>"Goiás"</code>.</td>
+    <td>Rótulo muda para <code>Goiás</code> e exibe apenas <em>Colheitadeira New Holland CR 9060</em>.</td>
+    <td>Rótulo atualizado para <code>Goiás</code> e lista exibiu somente CR 9060 (Rio Verde, GO).</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T12</td><td>Início</td>
+    <td>(I5) Tocar em <code>Gado &amp; Animais</code> e depois tocar em <code>Ver todos&gt;</code>.</td>
+    <td>Filtra para 1 item (Nelore) e depois restaura todos os 4 anúncios.</td>
+    <td>Filtrou corretamente para Nelore e restaurou os 4 cards após <code>Ver todos&gt;</code>.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T13</td><td>Início</td>
+    <td>(I6) Tocar em <code>Leilões Ativos</code>, limpar e tocar em <code>Barter &amp; Permuta</code>.</td>
+    <td><em>Leilões</em> mostra <em>"Nenhum leilão ativo no momento"</em>; <em>Barter</em> filtra 2 itens.</td>
+    <td>Estado vazio exibido em Leilões; Barter exibiu John Deere e Colheitadeira CR 9060.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T14</td><td>Início</td>
+    <td>(I8) Rolar a lista <code>-1500 px</code> na vertical e testar clique em E1 e E10.</td>
+    <td>Cabeçalho e barra inferior continuam fixos e clicáveis.</td>
+    <td>Sino (E1) e <code>navInicio</code> (E10) permaneceram fixos e clicáveis.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+</table>
+</div>
+
+<!-- PAGE 7: RELATORIO DE TESTES PARTE 2 (TELA 2 + NAVEGACAO) -->
+<div class="page">
+<h2>3. Relatório de Casos de Teste — Navegação (Ida e Volta) e Tela Detalhes Do Lote</h2>
+<table>
+  <tr>
+    <th style="width:5%">ID</th>
+    <th style="width:10%">Tela</th>
+    <th style="width:18%">Passos</th>
+    <th style="width:18%">Esperado</th>
+    <th style="width:18%">Obtido (1ª execução)</th>
+    <th style="width:7%">Status</th>
+    <th style="width:16%">Correção</th>
+    <th style="width:8%">Status depois</th>
+  </tr>
+  <tr>
+    <td>T15</td><td>Início → Detalhes</td>
+    <td>(N1) Tocar em <em>Negociar</em> no card 1 (<em>Novilhas Nelore</em>).</td>
+    <td>Abre <em>Detalhes Do Lote</em> com título Nelore, R$ 148.000, galeria <code>1/3</code> e <code>#AGR-4501</code>.</td>
+    <td>Abriu <em>Detalhes Do Lote</em> exibindo todos os dados do lote de Uberaba/MG e <code>1/3</code>.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T16</td><td>Início → Detalhes</td>
+    <td>(N2) Tocar em <em>Negociar</em> no card 2 (<em>Trator John Deere 8335R</em>).</td>
+    <td>Abre <em>Detalhes Do Lote</em> com <em>Trator John Deere 8335R</em>, R$ 430.000, <code>1/6</code> e 7 specs.</td>
+    <td>Abriu com título exato, galeria <code>1/6</code>, Antônio Novaes e os 7 itens da ficha.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T17</td><td>Início → Detalhes</td>
+    <td>(N3 / N4) Tocar em <em>Negociar</em> nos cards 3 (CR 9060) e 4 (Uniport 3030).</td>
+    <td>Abre <em>Detalhes Do Lote</em> com os dados e valores (R$ 890.000 e R$ 620.000) correspondentes.</td>
+    <td>Abriu cada anúncio com título, local, ficha e código corretos (<code>#AGR-9060</code> / <code>#AGR-3030</code>).</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T18</td><td>Detalhes → Início</td>
+    <td>(Volta + Estado) Buscar <code>"John Deere"</code>, abrir Detalhes, tocar em Favoritar e voltar (<code>btnVoltar</code>).</td>
+    <td>Volta à <em>Início</em> mantendo filtro <code>"John Deere"</code> (1 card) e exibindo selo de coração no card.</td>
+    <td>Retornou à <em>Início</em> com a busca preservada e <code>badgeFavorito_agr-8335</code> visível.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T19</td><td>Detalhes</td>
+    <td>(C1) Abrir <em>Detalhes Do Lote</em> isolada (sem tela anterior) e tocar em <code>btnVoltar</code>.</td>
+    <td>Exibe SnackBar <em>"Voltando para o Início"</em> sem fechar o app.</td>
+    <td>Exibiu <em>"Voltando para o Início"</em> corretamente.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T20</td><td>Detalhes</td>
+    <td>(C2/C3) Tocar duas vezes em Favoritar (E2) e uma em Compartilhar (E2).</td>
+    <td>Alterna coração vermelho / vazio com avisos; Compartilhar avisa <em>"Link do anúncio copiado"</em>.</td>
+    <td>Avisos <em>"Adicionado aos favoritos"</em>, <em>"Removido dos favoritos"</em> e <em>"Link do anúncio copiado"</em> exibidos.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T21</td><td>Detalhes</td>
+    <td>(C4/C5/C6) Tocar em <code>›</code>, duas vezes em <code>‹</code> e na 4ª miniatura (E3).</td>
+    <td>Contador vai <code>1/6 → 2/6 → 6/6 → 4/6</code> e troca imagem + borda.</td>
+    <td>Todos os contadores (<code>1/6</code>, <code>2/6</code>, <code>6/6</code>, <code>4/6</code>) e seleção atualizados conforme esperado.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T22</td><td>Detalhes</td>
+    <td>(C7) Rolar até <em>Calcular CEP</em>, digitar <code>13560000</code> e tocar em <em>Calcular</em>.</td>
+    <td>Abre diálogo e exibe <em>"Frete estimado: R$ 4.800"</em>.</td>
+    <td>Na base inicial, <code>scrollUntilVisible</code> não trazia botão para área clicável; ajustada rolagem em <code>widget_test.dart</code>.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>T23</td><td>Detalhes</td>
+    <td>(C8–C11) Tocar em WhatsApp, Telefone, Proposta Formal e rolar <code>-2000 px</code>.</td>
+    <td>Avisos exibidos; botão WhatsApp (E12) e seta voltar (E1) fixos e clicáveis após rolagem.</td>
+    <td>Todos os avisos exibidos e barras fixas clicáveis em teste automatizado e no Chrome.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+</table>
+</div>
+
+<!-- PAGE 8: TENTATIVAS DE QUEBRAR O FLUXO -->
+<div class="page">
+<h2>3. Relatório de Casos de Teste — Tentativas de Quebrar o Fluxo</h2>
+<table>
+  <tr>
+    <th style="width:5%">ID</th>
+    <th style="width:10%">Tela</th>
+    <th style="width:18%">Passos</th>
+    <th style="width:17%">Esperado</th>
+    <th style="width:18%">Obtido (1ª execução)</th>
+    <th style="width:7%">Status</th>
+    <th style="width:17%">Correção</th>
+    <th style="width:8%">Status depois</th>
+  </tr>
+  <tr>
+    <td>B1</td><td>Início</td>
+    <td><strong>Campo só com espaços:</strong> digitar <code>"   "</code> na busca e tocar em <code>Buscar →</code>.</td>
+    <td>Ignorar espaços extras e manter os 4 anúncios visíveis sem erro.</td>
+    <td>Filtrou por string com 3 espaços, zerou a lista e exibiu <em>"Nenhum anúncio encontrado"</em>.</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Aplicado <code>.trim()</code> em <code>_aplicarBusca()</code> no arquivo <code>inicio_page.dart</code>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>B2</td><td>Detalhes</td>
+    <td><strong>Campo CEP vazio / só espaços:</strong> abrir <em>Calcular CEP</em>, digitar <code>"   "</code> e confirmar <em>Calcular</em>.</td>
+    <td>Recusar entrada inválida sem calcular valor fictício de frete.</td>
+    <td>Exibiu incorretamente <em>"Frete estimado: R$ 4.800"</em> mesmo sem CEP válido.</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Adicionada validação de 8 dígitos numéricos em <code>calcularCep()</code> exibindo <em>"Informe um CEP válido com 8 dígitos"</em>.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>B3</td><td>Início → Detalhes</td>
+    <td><strong>Toque duplo rápido:</strong> tocar duas vezes no botão <em>Negociar</em> com intervalo de <code>20 ms</code> e voltar 1 vez.</td>
+    <td>Abrir somente 1 instância de <em>Detalhes Do Lote</em> e retornar direto à <em>Início</em> no 1º voltar.</td>
+    <td>Sem trava, dois toques rápidos empilhavam 2 rotas; após o 1º voltar ainda permanecia em <em>Detalhes Do Lote</em>.</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Adicionada trava booleana <code>_navegando</code> em <code>_abrirDetalhes()</code> (<code>inicio_page.dart</code>).</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>B4</td><td>Detalhes → Início</td>
+    <td><strong>Voltar várias vezes:</strong> tocar duas vezes seguidas na seta voltar em <code>20 ms</code> ao sair para a <em>Início</em>.</td>
+    <td>Retornar à <em>Início</em> sem empilhar erro, fechar o app nem disparar pop duplicado.</td>
+    <td>Permaneceu estável na tela <em>Início</em> com trava <code>_voltando</code> em <code>voltar()</code> e guarda em <code>PopScope</code>.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+  <tr>
+    <td>B5</td><td>Início e Detalhes</td>
+    <td><strong>Texto longo:</strong> buscar 80 caracteres (<code>'A'*80</code>) e renderizar card/detalhe com título, cidade e local extensos.</td>
+    <td>Quebrar linhas ou truncar com reticências (<code>...</code>) sem qualquer <em>RenderFlex overflow</em>.</td>
+    <td>Overflow de <code>78 px</code> em categoria/cidade do card (<code>inicio_page.dart:823</code>) e <code>51 px</code> no título com trailing (<code>detalhes_lote_page.dart:540</code>).</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Aplicado <code>Flexible</code> + <code>maxLines</code> + <code>ellipsis</code> nos badges, cabeçalho de cards, <code>_titulo()</code> e rodapé de ambas as telas.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>B6</td><td>Início e Detalhes</td>
+    <td><strong>Janela estreita (320×700 px):</strong> reduzir viewport para 320 px e rolar as duas telas completas.</td>
+    <td>Interface responsiva sem faixas amarelas/pretas de <em>RenderFlex overflow</em>.</td>
+    <td>Overflow de <code>230 px</code> na cotação, <code>134 px</code> no campo de região e <code>147 px</code> no rodapé CTA.</td>
+    <td><span class="badge fail">Falhou</span></td>
+    <td>Refeitas linhas com <code>Wrap</code>, <code>FittedBox(scaleDown)</code>, <code>Flexible</code> e <code>minHeight</code>; retestado em <code>flutter test</code> e Chrome 320 px.</td>
+    <td><span class="badge pass">Passou</span></td>
+  </tr>
+  <tr>
+    <td>B7</td><td>Ambas (Final)</td>
+    <td><strong>Repetição completa após correções:</strong> executar <code>flutter test</code> (19 suítes) e navegar no build Web no Chrome (390 px).</td>
+    <td>Todos os casos das duas telas, navegação e tentativas de quebra passando sem erro.</td>
+    <td><code>00:05 +19: All tests passed!</code> no Flutter e captura completa verificada no Chrome 390×844 e 320×700.</td>
+    <td><span class="badge pass">Passou</span></td><td>—</td><td><span class="badge na">—</span></td>
+  </tr>
+</table>
+</div>
+
+</body>
+</html>
