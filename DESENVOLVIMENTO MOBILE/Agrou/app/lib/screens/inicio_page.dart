@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../models/anuncio.dart';
+import '../models/meus_anuncios.dart';
 import '../theme/agrou_colors.dart';
+import 'anunciar_page.dart';
 import 'detalhes_lote_page.dart';
+import 'painel_page.dart';
 
 class InicioPage extends StatefulWidget {
   final List<Anuncio> anuncios;
@@ -32,10 +35,99 @@ class _InicioPageState extends State<InicioPage> {
     'Goiás',
   ];
 
+  final _store = MeusAnunciosStore.instancia;
+
+  @override
+  void initState() {
+    super.initState();
+    _store.addListener(_onStoreChanged);
+  }
+
+  void _onStoreChanged() {
+    if (mounted) setState(() {});
+  }
+
   @override
   void dispose() {
+    _store.removeListener(_onStoreChanged);
     _buscaCtrl.dispose();
     super.dispose();
+  }
+
+  List<Anuncio> get _todosAnuncios {
+    final novos = _store.itens
+        .where((m) => m.id.startsWith('novo_') && m.status == StatusAnuncio.ativo)
+        .map((m) => Anuncio(
+              id: m.id,
+              codigo: '#AGR-${m.id.toUpperCase()}',
+              setor: m.categoria == 'Máquinas'
+                  ? 'Tratores & Máquinas'
+                  : 'Gado & Animais',
+              categoriaCard: m.etiquetaCategoria.toUpperCase(),
+              tituloCard: m.titulo,
+              tituloDetalhe: m.titulo,
+              cidadeUf: m.local,
+              regiaoFiltro: 'Mato Grosso & SP',
+              localDetalhe:
+                  '${m.local} • Disponível para vistoria física na fazenda',
+              precoLabel: m.precoLabel,
+              preco: m.precoFormatado,
+              imagemCard: m.imagem,
+              badgeFotoTopo: 'Recém Publicado',
+              badgeFotoBase: m.rodapeFoto,
+              spec1Rotulo: 'Ano / Modelo:',
+              spec1Valor: m.ano,
+              spec2Rotulo: 'Horímetro:',
+              spec2Valor: '${m.horimetro}h',
+              modalidades: const ['Compra Direta', 'Barter & Permuta'],
+              fotosDetalhe: [
+                m.imagem,
+                'assets/thumb2.png',
+                'assets/thumb3.png',
+                'assets/thumb4.png',
+                'assets/thumb5.png',
+                'assets/foto1.png',
+              ],
+              etiquetas: [
+                m.etiquetaCategoria,
+                m.estado.split(' - ').first,
+                'Produtor Verificado (CPF/CNPJ)',
+              ],
+              permutaSub: 'Gado ou Soja Futura',
+              vendedorNome: 'Antônio Carlos Novaes',
+              vendedorFazenda: 'Fazenda Boa Esperança • ${m.local}',
+              vendedorDesde: 'Produtor cadastrado desde 2021',
+              vendedorNota: '4.9',
+              vendedorVendas: '(28 vendas\nconcluídas)',
+              ficha: [
+                ItemFicha(
+                    icone: Icons.speed,
+                    rotulo: 'HORÍMETRO',
+                    valor: '${m.horimetro} horas',
+                    sub: 'Informado pelo produtor',
+                    subVerde: true),
+                ItemFicha(
+                    icone: Icons.calendar_month_outlined,
+                    rotulo: 'ANO / MODELO',
+                    valor: m.ano,
+                    sub: m.marca),
+                ItemFicha(
+                    icone: Icons.bolt,
+                    rotulo: 'POTÊNCIA NOMINAL',
+                    valor: '${m.potencia} cv',
+                    sub: m.tracao),
+              ],
+              historicoTitulo: 'Anúncio publicado pelo produtor',
+              historicoDescricao: m.subtitulo,
+              historicoObs: [
+                'WhatsApp certificado: ${m.whatsapp}.',
+                'Ponto de coleta: ${m.local}.',
+              ],
+              freteEstimado: 'R\$ 4.800',
+              freteSubtitulo: 'Transportadoras credenciadas com seguro total',
+            ))
+        .toList();
+    return [...novos, ...widget.anuncios];
   }
 
   void _aviso(String msg) {
@@ -49,7 +141,7 @@ class _InicioPageState extends State<InicioPage> {
   }
 
   List<Anuncio> get _anunciosFiltrados {
-    return widget.anuncios.where((a) {
+    return _todosAnuncios.where((a) {
       if (_setorSelecionado != null && a.setor != _setorSelecionado) {
         return false;
       }
@@ -148,6 +240,32 @@ class _InicioPageState extends State<InicioPage> {
           }
         });
       }
+    } finally {
+      _navegando = false;
+    }
+  }
+
+  Future<void> _abrirAnunciar() async {
+    if (_navegando) return;
+    _navegando = true;
+    try {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AnunciarPage()),
+      );
+    } finally {
+      _navegando = false;
+    }
+  }
+
+  Future<void> _abrirPainel() async {
+    if (_navegando) return;
+    _navegando = true;
+    try {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const PainelPage()),
+      );
     } finally {
       _navegando = false;
     }
@@ -989,8 +1107,7 @@ class _InicioPageState extends State<InicioPage> {
           height: 44,
           child: FilledButton.icon(
             key: const Key('btnPublicarCta'),
-            onPressed: () =>
-                _aviso('Criação de anúncio disponível na próxima entrega'),
+            onPressed: _abrirAnunciar,
             style: FilledButton.styleFrom(
               backgroundColor: AgrouColors.verdeBotao,
               shape: RoundedRectangleBorder(
@@ -1142,8 +1259,7 @@ class _InicioPageState extends State<InicioPage> {
             Expanded(
               child: InkWell(
                 key: const Key('navAnunciar'),
-                onTap: () =>
-                    _aviso('Criação de anúncio disponível na próxima entrega'),
+                onTap: _abrirAnunciar,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -1172,7 +1288,8 @@ class _InicioPageState extends State<InicioPage> {
             ),
             navItem(
                 const Key('navAnuncios'), Icons.grid_view_outlined, 'Anúncios',
-                badge: '3'),
+                badge: '${_store.contar(StatusAnuncio.ativo)}',
+                onTap: _abrirPainel),
             navItem(const Key('navPerfil'), Icons.person_outline, 'Perfil'),
           ]),
         ),

@@ -1,1 +1,13 @@
-<!DOCTYPE html><html><body style="margin:0;background:#fff"><iframe src="index.html" style="width:390px;height:844px;border:0;display:block"></iframe></body></html>
+<!DOCTYPE html>
+<html>
+<body style="margin:0;background:#fff;overflow:hidden">
+<iframe id="f" style="border:0;display:block"></iframe>
+<script>
+const p = new URLSearchParams(location.search);
+const f = document.getElementById('f');
+f.style.width = (p.get('w') || 390) + 'px';
+f.style.height = (p.get('h') || 2260) + 'px';
+f.src = 'index.html?tela=' + (p.get('tela') || 'inicio');
+</script>
+</body>
+</html>
