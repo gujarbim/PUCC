@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Agrou – Fluxo Completo do MVP e Testes de Ponta a Ponta</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm 11mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #151b2b;
+    font-size: 9.4pt;
+    line-height: 1.38;
+    margin: 0;
+  }
+  h1 { color: #0f5c2a; font-size: 19pt; margin: 0 0 4px; }
+  h2 {
+    color: #0f5c2a;
+    font-size: 12.5pt;
+    border-bottom: 2px solid #1b7a3a;
+    padding-bottom: 3px;
+    margin: 12px 0 8px;
+  }
+  h3 { color: #1b7a3a; font-size: 10pt; margin: 8px 0 4px; }
+  p { margin: 4px 0 7px; }
+  .sub { color: #5b6070; font-size: 9.2pt; margin-bottom: 8px; }
+  .commit-box {
+    background: #eef8f1;
+    border: 1.5px solid #006b2c;
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-bottom: 10px;
+  }
+  .commit-box a {
+    color: #006b2c;
+    font-weight: 700;
+    font-size: 10pt;
+    word-break: break-all;
+  }
+  .meta-box {
+    background: #f1f2fa;
+    border: 1px solid #d7dcf5;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 9pt;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 6px 0 10px;
+    font-size: 8.5pt;
+  }
+  th, td {
+    border: 1px solid #cfd6e6;
+    padding: 5px 6px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #e8f5e9; color: #0f5c2a; font-weight: 700; }
+  tr { break-inside: avoid; }
+  .page { page-break-before: always; }
+  .grid-prints {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 6px;
+  }
+  .pair-card {
+    border: 1px solid #d4daea;
+    border-radius: 8px;
+    padding: 8px;
+    background: #faf8ff;
+    break-inside: avoid;
+  }
+  .pair-title {
+    font-weight: 700;
+    color: #0f5c2a;
+    font-size: 9.4pt;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .pair-imgs {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .shot {
+    width: 196px;
+    text-align: center;
+  }
+  .shot-label {
+    font-size: 8.4pt;
+    font-weight: 700;
+    color: #283044;
+    margin-bottom: 4px;
+  }
+  .shot img {
+    width: 196px;
+    height: auto;
+    max-height: 505px;
+    object-fit: contain;
+    border: 1px solid #bcc5dc;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 7.8pt;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .pass { background: #dcfce7; color: #14532d; }
+  .fail { background: #fee2e2; color: #991b1b; }
+  code { background: #eef1f8; padding: 1px 4px; border-radius: 3px; font-size: 8pt; }
+</style>
+</head>
+<body>
+
+<h1>Agrou – Fluxo Completo do MVP e Testes de Ponta a Ponta</h1>
+<div class="sub">
+  Disciplina: Desenvolvimento Mobile (218191) – PUC-Campinas ·
+  Grupo: Gustavo Alencar, Mateus Eler Galvão de França, Arthur Grandesi Dovigo, Gabriel Souza de Oliveira
+</div>
+
+<div class="commit-box">
+  <div><strong>1. Link do commit (telas, navegação completa, especificações em <code>specs/</code> e testes):</strong></div>
+  <div style="margin-top:3px;">
+    <a href="https://github.com/gujarbim/PUCC/commit/250b768bf595d95aad4b2d704f115b64afdf9427">https://github.com/gujarbim/PUCC/commit/250b768bf595d95aad4b2d704f115b64afdf9427</a>
+  </div>
+</div>
+
+<div class="meta-box">
+  <strong>Resumo do fluxo completo do MVP (4 telas conectadas):</strong>
+  <code>Agrou – Início</code> (M1) ↔ <code>Detalhes Do Lote</code> (M2) ·
+  <code>Agrou – Início</code> ↔ <code>Anunciar</code> (M3) → <code>Painel – Meus Anúncios</code> (M4) ↔ <code>Anunciar</code> (Criar / Editar) ↔ <code>Detalhes Do Lote</code>.
+  <br>
+  <strong>Especificações salvas em <code>Agrou/specs/</code> no commit:</strong>
+  <code>specs/spec_anunciar.md</code>, <code>specs/spec_painel.md</code>, <code>specs/spec_inicio.md</code> e <code>specs/spec_detalhes.md</code>.
+  <br>
+  <strong>Verificação automatizada pós-correção:</strong> <code>flutter analyze</code> (0 issues) e <code>flutter test</code> (26/26 testes passando, incluindo os 7 testes ponta a ponta em <code>app/test/fluxo_mvp_test.dart</code>).
+</div>
+
+<h2>2. Prints Lado a Lado (Mesma Largura) – Tela Nova 1: Anunciar (Must M3)</h2>
+<div class="grid-prints">
+  <div class="pair-card">
+    <div class="pair-title">Anunciar – Parte Superior (Progresso, Fotos, Classificação e Ficha)</div>
+    <div class="pair-imgs">
+      <div class="shot">
+        <div class="shot-label">Figma (435 px)</div>
+        <img src="prints/figma_anunciar_1.png" alt="Figma Anunciar 1">
+      </div>
+      <div class="shot">
+        <div class="shot-label">App Flutter (435 px)</div>
+        <img src="prints/app_anunciar_1.png" alt="App Anunciar 1">
+      </div>
+    </div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Anunciar – Parte Inferior (Preço, Flexibilidade, Contato, Destaque e Publicar)</div>
+    <div class="pair-imgs">
+      <div class="shot">
+        <div class="shot-label">Figma (435 px)</div>
+        <img src="prints/figma_anunciar_2.png" alt="Figma Anunciar 2">
+      </div>
+      <div class="shot">
+        <div class="shot-label">App Flutter (435 px)</div>
+        <img src="prints/app_anunciar_2.png" alt="App Anunciar 2">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+<h2>2. Prints Lado a Lado (Mesma Largura) – Tela Nova 2: Painel – Meus Anúncios (Must M4)</h2>
+<div class="grid-prints">
+  <div class="pair-card">
+    <div class="pair-title">Painel – Parte Superior (Produtor, Métricas, Abas e Card Trator 8335R)</div>
+    <div class="pair-imgs">
+      <div class="shot">
+        <div class="shot-label">Figma (390 px)</div>
+        <img src="prints/figma_painel_1.png" alt="Figma Painel 1">
+      </div>
+      <div class="shot">
+        <div class="shot-label">App Flutter (390 px)</div>
+        <img src="prints/app_painel_1.png" alt="App Painel 1">
+      </div>
+    </div>
+  </div>
+  <div class="pair-card">
+    <div class="pair-title">Painel – Parte Inferior (Demais Cards, Segurança da Propriedade e Barra Inferior)</div>
+    <div class="pair-imgs">
+      <div class="shot">
+        <div class="shot-label">Figma (390 px)</div>
+        <img src="prints/figma_painel_2.png" alt="Figma Painel 2">
+      </div>
+      <div class="shot">
+        <div class="shot-label">App Flutter (390 px)</div>
+        <img src="prints/app_painel_2.png" alt="App Painel 2">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="page">
+<h2>3. Tabela de Testes de Ponta a Ponta (Fluxo Completo do MVP)</h2>
+<p>Todos os testes foram executados de ponta a ponta no app Flutter (<code>test/fluxo_mvp_test.dart</code> e validação visual lado a lado com o Figma). O teste que falhou na primeira execução mantém o status <strong>Falhou</strong> nesta tabela e tem sua correção e reteste registrados na seção 4.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:4%;">ID</th>
+      <th style="width:15%;">Teste</th>
+      <th style="width:27%;">Passos</th>
+      <th style="width:22%;">Esperado</th>
+      <th style="width:24%;">Obtido</th>
+      <th style="width:8%;">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>T1</strong></td>
+      <td>Caminho principal: publicar anúncio, abrir detalhes e ver no Início</td>
+      <td>1. Na tela <em>Início</em> (badge Anúncios = <code>3</code>), tocar em <strong>+ Anunciar</strong>.<br>2. Em <em>Anunciar</em>, alterar Modelo Comercial para <code>8400R</code> e Valor à Vista para <code>510.000,00</code>.<br>3. Tocar em <strong>Publicar Anúncio Agora</strong>.<br>4. No <em>Painel</em>, tocar no card publicado para abrir <em>Detalhes Do Lote</em>.<br>5. Voltar ao <em>Painel</em> e tocar em <strong>Início</strong>.</td>
+      <td>Abre <em>Painel – Meus Anúncios</em> com <code>Anúncios Ativos = 4</code>, aba <code>Ativos [4]</code> e card <code>Trator John Deere 8400R</code> com <code>R$ 510.000</code>. Ao abrir detalhes, mostra título <code>Trator John Deere 8400R</code> e preço <code>R$ 510.000</code>. Ao voltar para <em>Início</em>, o novo card aparece em <em>Oportunidades do Dia</em>.</td>
+      <td>Abriu <em>Meus Anúncios</em> com KPI <code>4</code>, aba <code>Ativos 4</code>, card <code>Trator John Deere 8400R</code> (<code>R$ 510.000</code>). Detalhes exibiu <code>Trator John Deere 8400R</code> e <code>R$ 510.000</code>. No retorno ao <em>Início</em>, o card <code>Trator John Deere 8400R</code> apareceu no topo das oportunidades.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T2</strong></td>
+      <td>Caminho alternativo: voltar no meio sem publicar</td>
+      <td>1. Em <em>Início</em>, tocar em <strong>+ Anunciar</strong>.<br>2. Alterar Modelo Comercial para <code>9999X</code>.<br>3. Tocar na seta <strong>Voltar</strong> no cabeçalho sem tocar em Publicar.</td>
+      <td>Fecha <em>Anunciar</em> e retorna para <em>Início</em> (<code>Negocie direto no campo sem intermediários</code>). Nenhum anúncio <code>Trator John Deere 9999X</code> é criado e o badge de ativos permanece em <code>3</code>.</td>
+      <td>Retornou para <em>Início</em> sem criar anúncio. O texto <code>Trator John Deere 9999X</code> não apareceu na lista nem no Painel, e o contador permaneceu em <code>3</code>.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T3</strong></td>
+      <td>Caminho alternativo: deixar campos obrigatórios vazios</td>
+      <td>1. Em <em>Início</em>, tocar em <strong>+ Anunciar</strong>.<br>2. Apagar os campos <em>Modelo Comercial</em> e <em>Valor à Vista / Liquidação</em>.<br>3. Tocar em <strong>Publicar Anúncio Agora</strong>.</td>
+      <td>Permanece na tela <em>Anunciar</em>, exibe as mensagens <code>Informe o modelo comercial</code> e <code>Informe um valor válido maior que zero</code> e mantém <code>Anúncios Ativos = 3</code>.</td>
+      <td>Permaneceu em <em>Anunciar</em>, exibiu os erros de validação nos campos vazios e o aviso <code>Preencha os campos obrigatórios antes de publicar</code>; contador seguiu em <code>3</code>.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T4</strong></td>
+      <td>Caminho alternativo: editar anúncio no Painel e alterar valor</td>
+      <td>1. Em <em>Início</em>, tocar na aba <strong>Anúncios</strong>.<br>2. No card <code>Trator John Deere 8335R</code> (<code>R$ 430.000</code>), tocar em <strong>Editar</strong>.<br>3. Alterar o valor para <code>415.000,00</code> e tocar em <strong>Salvar Alterações</strong>.</td>
+      <td>Abre <em>Editar Anúncio</em> preenchido com <code>8335R</code> e <code>430.000,00</code>; após salvar, volta para <em>Painel – Meus Anúncios</em> exibindo <code>R$ 415.000</code> no card, mantendo <code>Anúncios Ativos = 3</code>.</td>
+      <td>Abriu <em>Editar Anúncio</em> com os dados do lote; após salvar, retornou ao <em>Painel</em> mostrando <code>R$ 415.000</code> no card <code>Trator John Deere 8335R</code> e KPI <code>3</code> ativos (sem duplicar).</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T5</strong></td>
+      <td>Gestão completa no Painel: pausar, reativar e excluir</td>
+      <td>1. Abrir <em>Painel</em> (<code>Ativos 3</code>, <code>Pausados 1</code>).<br>2. Tocar em <strong>Pausar</strong> no card <code>Lote 60 Bezerras Nelore Desmama</code>.<br>3. Abrir aba <strong>Pausados</strong> e tocar em <strong>Reativar Anúncio</strong> em <code>Grade Aradora Baldan 28 Discos</code>.<br>4. Voltar à aba <strong>Ativos</strong> e tocar em <strong>Excluir</strong> na <code>Grade Aradora Baldan 28 Discos</code>.</td>
+      <td>Após pausar: <code>Ativos 2</code>, <code>Pausados 2</code>. Após reativar a grade: <code>Ativos 3</code>, <code>Pausados 1</code>. Após excluir a grade: <code>Ativos 2</code> e o card <code>Grade Aradora Baldan 28 Discos</code> desaparece da lista.</td>
+      <td>Contadores mudaram exatamente de <code>3/1</code> → <code>2/2</code> → <code>3/1</code> → <code>2/1</code>, e o card <code>Grade Aradora Baldan 28 Discos</code> foi removido após o toque em <strong>Excluir</strong>.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T6</strong></td>
+      <td>Caminho alternativo: toque duplo rápido em Publicar</td>
+      <td>1. Em <em>Início</em>, tocar em <strong>+ Anunciar</strong>.<br>2. Alterar Modelo Comercial para <code>7230J</code>.<br>3. Tocar duas vezes seguidas rapidamente em <strong>Publicar Anúncio Agora</strong>.</td>
+      <td>Abre apenas uma tela <em>Painel</em> com <code>Anúncios Ativos = 4</code> (não <code>5</code>) e apenas um card <code>Trator John Deere 7230J</code>.</td>
+      <td>A trava anti-duplo-toque (<code>_enviando</code>) bloqueou o segundo envio: abriu 1 tela <em>Painel</em>, exibiu <code>Anúncios Ativos = 4</code> e apenas 1 card <code>Trator John Deere 7230J</code>.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+    <tr>
+      <td><strong>T7</strong></td>
+      <td>Salvar rascunho no galpão e layout em largura estreita (320 px)</td>
+      <td>1. Abrir o app em largura <code>320 px</code>.<br>2. Tocar em <strong>+ Anunciar</strong>, digitar modelo <code>6150J</code>.<br>3. Tocar em <strong>Salvar Rascunho &amp; Continuar no Galpão</strong>.</td>
+      <td>Sem erro de layout/overflow em <code>320 px</code>; abre <em>Painel</em> direto na aba <strong>Pausados</strong> com contador <code>2</code> e card <code>Trator John Deere 6150J</code>.</td>
+      <td>Salvou o rascunho em <code>Pausados [2]</code> com <code>Trator John Deere 6150J</code>, porém o Flutter reportou exceção de layout na grade de fotos de <em>Anunciar</em>: <code>A RenderFlex overflowed by 14 pixels on the bottom</code>.</td>
+      <td><span class="badge fail">Falhou</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4. Tabela de Correções</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width:12%;">ID do teste</th>
+      <th style="width:74%;">O que foi corrigido</th>
+      <th style="width:14%;">Reteste</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>T7</strong></td>
+      <td>Na tela <code>Anunciar</code> (<code>lib/screens/anunciar_page.dart</code>), a grade 2×2 de fotos usava <code>childAspectRatio: 1.48</code>, o que reduzia a altura do cartão <em>Adicionar Foto</em> abaixo do necessário em telas de <code>320 px</code> e gerava <code>RenderFlex overflowed by 14 pixels on the bottom</code>. Substituímos por altura fixa <code>mainAxisExtent: 122</code> e envolvemos o conteúdo interno do cartão em <code>FittedBox(fit: BoxFit.scaleDown)</code> com <code>padding: 8</code>. Todos os 26 testes do projeto (<code>widget_test.dart</code> + <code>fluxo_mvp_test.dart</code>) foram reexecutados e passaram sem exceções.</td>
+      <td><span class="badge pass">Passou</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>
